@@ -1,25 +1,33 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  try {
+    const app = await NestFactory.create(AppModule);
+    app.enableCors();
 
-  // For local development
-  if (process.env.NODE_ENV !== 'production') {
-    const port = process.env.PORT ?? 3000;
-    await app.listen(port);
-    console.log(`Backend running on http://localhost:${port}`);
+    // For local development (only run listen if not on Vercel)
+    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+      const port = process.env.PORT ?? 3000;
+      await app.listen(port);
+      console.log(`Backend running on http://localhost:${port}`);
+    }
+
+    await app.init();
+    return app.getHttpAdapter().getInstance();
+  } catch (err) {
+    console.error('Error during NestJS bootstrap:', err);
+    throw err;
   }
-
-  await app.init();
-  return app.getHttpAdapter().getInstance();
 }
 
-// For Vercel, we export the default function
-const serverPromise = bootstrap();
+// Initializing the server once
+let server: any;
+
 export default async (req: any, res: any) => {
-  const server = await serverPromise;
+  if (!server) {
+    server = await bootstrap();
+  }
   return server(req, res);
 };
-

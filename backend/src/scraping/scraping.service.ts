@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { chromium, Browser } from 'playwright';
 import { ScrapeJob, ScrapeStatus } from './entities/scrape-job.entity';
 import { Navigation } from '../navigation/entities/navigation.entity';
 import { Category } from '../category/entities/category.entity';
@@ -12,7 +11,7 @@ import { ProductDetail } from '../product/entities/product-detail.entity';
 export class ScrapingService {
     private readonly logger = new Logger(ScrapingService.name);
     private readonly baseUrl = 'https://www.worldofbooks.com';
-    private browser: Browser | null = null;
+    private browser: any = null;
 
     constructor(
         @InjectRepository(ScrapeJob) private scrapeJobRepo: Repository<ScrapeJob>,
@@ -23,7 +22,12 @@ export class ScrapingService {
     ) { }
 
     private async getBrowser() {
+        if (process.env.VERCEL === '1') {
+            throw new Error('Scraping with Playwright is not supported on Vercel Serverless. Please use a remote browser or run locally.');
+        }
+
         if (!this.browser) {
+            const { chromium } = await import('playwright');
             this.browser = await chromium.launch({ headless: true });
         }
         return this.browser;
