@@ -16,19 +16,21 @@ import { ScrapingModule } from './scraping/scraping.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const databaseUrl = configService.get<string>('DATABASE_URL');
-        if (databaseUrl) {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+        if (isProduction || databaseUrl) {
+          console.log('Using POSTGRES database');
           return {
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: true, // Be careful in production
-            logging: true,
-            ssl: {
-              rejectUnauthorized: false,
-            },
+            synchronize: true,
+            ssl: { rejectUnauthorized: false },
           };
         }
+
+        console.log('Using SQLITE database');
         return {
           type: 'sqlite',
           database: 'database.sqlite',
