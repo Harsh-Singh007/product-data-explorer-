@@ -12,23 +12,21 @@ A full-stack product exploration platform that navigates World of Books (wob.com
 ## Prerequisites
 
 - Node.js (v18+)
-- Docker & Docker Compose
 
 ## Getting Started
 
-### 1. Database & Redis
+### 1. Database
 
-Start the infrastructure:
-
-```bash
-docker-compose up -d
-```
+The project is currently configured to use **SQLite** for ease of local development without Docker. 
+A `database.sqlite` file will be created in the `backend` directory automatically.
 
 ### 2. Backend
 
 ```bash
 cd backend
 npm install
+# Copy environment file
+cp .env.example .env
 npm run start:dev
 ```
 
@@ -43,7 +41,7 @@ npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:3001` (or next available port).
+The app will be available at `http://localhost:3001`.
 
 ## Environment Variables
 

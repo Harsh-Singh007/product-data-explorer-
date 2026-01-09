@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ProductDetail } from './product-detail.entity';
+import { Category } from '../../category/entities/category.entity';
 
 @Entity()
 export class Product {
@@ -12,7 +13,7 @@ export class Product {
     @Column()
     title: string;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+    @Column({ nullable: true })
     price: number;
 
     @Column({ nullable: true })
@@ -29,6 +30,13 @@ export class Product {
 
     @OneToOne(() => ProductDetail, (detail) => detail.product, { cascade: true })
     detail: ProductDetail;
+
+    @ManyToOne(() => Category, (category) => category.products, { nullable: true })
+    @JoinColumn({ name: 'categoryId' })
+    category: Category;
+
+    @Column({ nullable: true })
+    categoryId: number;
 
     @CreateDateColumn()
     createdAt: Date;

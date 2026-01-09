@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Navigation } from '../../navigation/entities/navigation.entity';
+import { Product } from '../../product/entities/product.entity';
 
 @Entity()
 export class Category {
@@ -31,6 +32,9 @@ export class Category {
 
     @Column({ default: 0 })
     productCount: number;
+
+    @OneToMany(() => Product, (product) => product.category)
+    products: Product[];
 
     @Column({ nullable: true })
     lastScrapedAt: Date;

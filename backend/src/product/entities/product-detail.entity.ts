@@ -16,10 +16,10 @@ export class ProductDetail {
     @Column({ type: 'text', nullable: true })
     description: string;
 
-    @Column({ type: 'jsonb', nullable: true })
+    @Column({ type: 'simple-json', nullable: true })
     specs: any;
 
-    @Column({ type: 'decimal', precision: 3, scale: 1, nullable: true })
+    @Column({ nullable: true })
     ratingsAvg: number;
 
     @Column({ default: 0 })

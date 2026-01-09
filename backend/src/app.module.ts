@@ -15,16 +15,28 @@ import { ScrapingModule } from './scraping/scraping.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('POSTGRES_HOST'),
-        port: configService.get<number>('POSTGRES_PORT'),
-        username: configService.get<string>('POSTGRES_USER'),
-        password: configService.get<string>('POSTGRES_PASSWORD'),
-        database: configService.get<string>('POSTGRES_DB'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // Auto-schema sync for dev
-      }),
+      useFactory: (configService: ConfigService) => {
+        const databaseUrl = configService.get<string>('DATABASE_URL');
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            autoLoadEntities: true,
+            synchronize: true, // Be careful in production
+            logging: true,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          };
+        }
+        return {
+          type: 'sqlite',
+          database: 'database.sqlite',
+          autoLoadEntities: true,
+          synchronize: true,
+          logging: true,
+        };
+      },
       inject: [ConfigService],
     }),
     NavigationModule,

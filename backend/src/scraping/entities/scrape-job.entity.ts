@@ -19,11 +19,10 @@ export class ScrapeJob {
     targetType: string;
 
     @Column({
-        type: 'simple-enum',
-        enum: ScrapeStatus,
+        type: 'text',
         default: ScrapeStatus.PENDING,
     })
-    status: ScrapeStatus;
+    status: string;
 
     @Column({ type: 'text', nullable: true })
     errorLog: string;
