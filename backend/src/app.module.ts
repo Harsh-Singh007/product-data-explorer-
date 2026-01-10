@@ -36,29 +36,42 @@ import { SeedingModule } from './seeding/seeding.module';
         console.log('Using SQLITE database');
 
         if (isProduction) {
-          // On Vercel, the filesystem is read-only except for /tmp
-          // SQLite needs to write journal files, so we MUST copy it to /tmp
-          const dbSource = path.join(process.cwd(), 'database.sqlite');
           const dbDest = path.join('/tmp', 'database.sqlite');
 
-          console.log(`Copying database from ${dbSource} to ${dbDest}`);
+          // Find the source database file (it might be in root, or inside dist/...)
+          const potentialPaths = [
+            path.join(process.cwd(), 'database.sqlite'),
+            path.join(__dirname, 'database.sqlite'),
+            path.join(__dirname, '..', 'database.sqlite'),
+            path.join(process.cwd(), 'backend', 'database.sqlite'), // In case cwd is repo root
+          ];
 
-          try {
-            // We copy even if it exists to ensure we have the latest seed data from build
-            if (fs.existsSync(dbSource)) {
-              fs.copyFileSync(dbSource, dbDest);
-            } else {
-              console.error(`Database source file not found at ${dbSource}`);
+          let dbSource = '';
+          for (const p of potentialPaths) {
+            if (fs.existsSync(p)) {
+              dbSource = p;
+              console.log(`Found database at ${p}`);
+              break;
             }
-          } catch (error) {
-            console.error('Error copying database to /tmp:', error);
+          }
+
+          if (dbSource) {
+            console.log(`Copying database from ${dbSource} to ${dbDest}`);
+            try {
+              fs.copyFileSync(dbSource, dbDest);
+            } catch (error) {
+              console.error('Error copying database to /tmp:', error);
+            }
+          } else {
+            console.error(`CRITICAL: Database file not found in: ${potentialPaths.join(', ')}`);
+            // We will continue, which will create an empty DB at dbDest due to synchronize: true
           }
 
           return {
             type: 'sqlite',
             database: dbDest,
             autoLoadEntities: true,
-            synchronize: true, // Enable sync so tables are created in /tmp if missing
+            synchronize: true,
             logging: true,
           };
         }

@@ -53,12 +53,22 @@ export default function Home() {
         <button
           onClick={async () => {
             const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+            const btn = document.getElementById('seed-btn');
+            if (btn) { btn.innerText = "Attempting to Repair..."; btn.setAttribute('disabled', 'true'); }
+
             try {
-              const btn = document.getElementById('seed-btn');
-              if (btn) btn.innerText = "Seeding...";
-              await fetch(`${apiUrl}/navigation/seed`);
-              window.location.reload();
-            } catch (e) { alert('Seed failed: ' + e); }
+              // First try to seed/repair
+              const res = await fetch(`${apiUrl}/navigation/seed`);
+              if (res.ok) {
+                alert('Database Repaired! Reloading...');
+                window.location.reload();
+              } else {
+                throw new Error(res.statusText);
+              }
+            } catch (e) {
+              alert('Repair failed: ' + e + '\nCheck backend logs.');
+              if (btn) { btn.innerText = "Initialize Database"; btn.removeAttribute('disabled'); }
+            }
           }}
           id="seed-btn"
           className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full transition-all font-semibold shadow-lg shadow-green-600/20"
