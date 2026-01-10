@@ -44,6 +44,31 @@ export default function Home() {
     </div>
   );
 
+  if (!navigation || navigation.length === 0) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="text-center p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md">
+        <div className="text-4xl mb-4">📭</div>
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Library is Empty</h2>
+        <p className="text-slate-600 dark:text-slate-400 mb-6 font-medium">The shelves are bare! We need to bring in the books.</p>
+        <button
+          onClick={async () => {
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+            try {
+              const btn = document.getElementById('seed-btn');
+              if (btn) btn.innerText = "Seeding...";
+              await fetch(`${apiUrl}/navigation/seed`);
+              window.location.reload();
+            } catch (e) { alert('Seed failed: ' + e); }
+          }}
+          id="seed-btn"
+          className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full transition-all font-semibold shadow-lg shadow-green-600/20"
+        >
+          Initialize Database
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
       {/* Hero Section */}

@@ -14,18 +14,28 @@ export class NavigationController {
         private seedingService: SeedingService,
     ) { }
 
+    @Get('seed')
+    async forceSeed() {
+        await this.seedingService.seedBasicData();
+        return { message: 'Seeding complete', count: 10 };
+    }
+
     @Get()
     async findAll() {
         const navs = await this.navRepo.find();
         if (navs.length === 0) {
             // Trigger lazy seed (Scraping fallback)
-            this.seedingService.seedBasicData().catch(console.error);
-            // Return defaults immediately so user doesn't wait for refresh
-            return [
-                { title: 'Best Sellers', slug: 'best-sellers', id: 1 },
-                { title: 'Fiction Books', slug: 'fiction-books', id: 2 },
-                { title: 'Loading others...', slug: '#', id: 3 },
-            ];
+            try {
+                await this.seedingService.seedBasicData();
+                return await this.navRepo.find();
+            } catch (e) {
+                console.error('Seeding failed:', e);
+                // Fallback hardcoded
+                return [
+                    { title: 'Best Sellers', slug: 'best-sellers', id: 1 },
+                    { title: 'Fiction Books', slug: 'fiction-books', id: 2 },
+                ];
+            }
         }
         return navs;
     }
