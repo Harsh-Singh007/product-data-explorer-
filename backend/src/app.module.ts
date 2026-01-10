@@ -19,13 +19,13 @@ import { ScrapingModule } from './scraping/scraping.module';
         const isProduction = process.env.NODE_ENV === 'production';
         const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
-        if (isProduction || databaseUrl) {
+        if (databaseUrl) {
           console.log('Using POSTGRES database');
           return {
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: true, // Be careful with this in production
             ssl: { rejectUnauthorized: false },
           };
         }
