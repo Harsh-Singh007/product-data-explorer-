@@ -17,14 +17,16 @@ export class NavigationController {
 
     @Get()
     async findAll() {
-        try {
-            const navs = await this.navRepo.find();
-            if (navs.length > 0) return navs;
-        } catch (e) {
-            console.error('DB Find Failed:', e);
-        }
+        // Debugging: Force Static Data to verify deployment
+        // try {
+        //     const navs = await this.navRepo.find();
+        //     if (navs.length > 0) return navs;
+        // } catch (e) {
+        //     console.error('DB Find Failed:', e);
+        // }
 
-        console.log('Serving static fallback navigation data.');
-        return STATIC_NAVIGATION_DATA;
+        console.log('Serving static fallback navigation data (FORCED).');
+        const forcedData = [...STATIC_NAVIGATION_DATA, { id: 999, title: 'Emergency API Data', slug: 'emergency' }];
+        return forcedData;
     }
 }
