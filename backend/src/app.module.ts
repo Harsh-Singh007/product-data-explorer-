@@ -9,6 +9,7 @@ import { NavigationModule } from './navigation/navigation.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { ScrapingModule } from './scraping/scraping.module';
+import { SeedingModule } from './seeding/seeding.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { ScrapingModule } from './scraping/scraping.module';
     CategoryModule,
     ProductModule,
     ScrapingModule,
+    SeedingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
