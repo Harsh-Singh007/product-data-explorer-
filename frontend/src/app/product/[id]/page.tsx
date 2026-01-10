@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Info, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { useCurrency } from '@/providers/CurrencyProvider';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 function useProduct(id: string) {
     return useQuery({

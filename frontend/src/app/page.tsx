@@ -26,7 +26,12 @@ export default function Home() {
           We couldn't reach the library shelves. <br />
           <span className="text-sm font-mono bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded text-red-600 dark:text-red-400">
             {error instanceof Error ? error.message : String(error)} <br />
-            (Target: {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'})
+            (Target: <a href={process.env.NEXT_PUBLIC_API_URL} target="_blank" className="underline hover:text-white">
+              {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}
+            </a>)
+          </span>
+          <span className="block mt-2 text-xs text-slate-500">
+            Click the link above. If it works, you see JSON. If it fails, the backend is down.
           </span>
         </p>
         <button
