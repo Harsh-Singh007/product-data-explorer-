@@ -6,7 +6,8 @@
             "use": "@vercel/node",
             "config": {
                 "includeFiles": [
-                    "database.sqlite"
+                    "database.sqlite",
+                    "cat-dump.json"
                 ]
             }
         }
