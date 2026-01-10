@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -33,9 +34,9 @@ import { ScrapingModule } from './scraping/scraping.module';
         console.log('Using SQLITE database');
         return {
           type: 'sqlite',
-          database: 'database.sqlite',
+          database: path.join(process.cwd(), 'database.sqlite'),
           autoLoadEntities: true,
-          synchronize: true,
+          synchronize: !isProduction, // Disable sync in production (read-only FS)
           logging: true,
         };
       },
