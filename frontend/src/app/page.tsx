@@ -22,7 +22,12 @@ export default function Home() {
       <div className="text-center p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-red-100 dark:border-red-900/30 max-w-md">
         <div className="text-4xl mb-4">😕</div>
         <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Connection Error</h2>
-        <p className="text-slate-600 dark:text-slate-400 mb-6 font-medium">We couldn't reach the library shelves. Please ensure the backend is running.</p>
+        <p className="text-slate-600 dark:text-slate-400 mb-6 font-medium">
+          We couldn't reach the library shelves. <br />
+          <span className="text-sm font-mono bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded text-red-600 dark:text-red-400">
+            {error instanceof Error ? error.message : String(error)}
+          </span>
+        </p>
         <button
           onClick={() => window.location.reload()}
           className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all font-semibold"
