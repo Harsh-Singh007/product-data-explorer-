@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Navigation } from './entities/navigation.entity';
 import { ScrapingService } from '../scraping/scraping.service';
 import { SeedingService } from '../seeding/seeding.service';
+import * as categoryDump from './cat-dump.json';
 
 @Controller('navigation')
 export class NavigationController {
