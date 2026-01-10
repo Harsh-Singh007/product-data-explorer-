@@ -57,7 +57,7 @@ import { ScrapingModule } from './scraping/scraping.module';
             type: 'sqlite',
             database: dbDest,
             autoLoadEntities: true,
-            synchronize: false, // Disable schema sync in production
+            synchronize: true, // Enable sync so tables are created in /tmp if missing
             logging: true,
           };
         }

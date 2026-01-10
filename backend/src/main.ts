@@ -5,7 +5,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
-    app.enableCors();
+    app.enableCors({
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+    });
 
     // For local development (only run listen if not on Vercel)
     if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {

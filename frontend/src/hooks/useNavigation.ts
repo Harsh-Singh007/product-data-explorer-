@@ -7,7 +7,10 @@ export function useNavigation() {
         queryKey: ['navigation'],
         queryFn: async () => {
             const res = await fetch(`${API_URL}/navigation`);
-            if (!res.ok) throw new Error('Failed to fetch navigation');
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || res.statusText);
+            }
             return res.json();
         },
     });
