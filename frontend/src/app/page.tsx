@@ -25,7 +25,8 @@ export default function Home() {
         <p className="text-slate-600 dark:text-slate-400 mb-6 font-medium">
           We couldn't reach the library shelves. <br />
           <span className="text-sm font-mono bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded text-red-600 dark:text-red-400">
-            {error instanceof Error ? error.message : String(error)}
+            {error instanceof Error ? error.message : String(error)} <br />
+            (Target: {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'})
           </span>
         </p>
         <button
