@@ -16,9 +16,6 @@ export class NavigationController {
 
     @Get()
     async findAll() {
-        const fs = require('fs');
-        const path = require('path');
-
         try {
             const navs = await this.navRepo.find();
             if (navs.length > 0) return navs;
@@ -26,27 +23,9 @@ export class NavigationController {
             console.error('DB Find Failed:', e);
         }
 
-        // DB is empty or failed (Vercel). Use the JSON dump.
-        const potentialPaths = [
-            path.join(process.cwd(), 'cat-dump.json'),
-            path.join(__dirname, 'cat-dump.json'),
-            path.join(__dirname, '..', 'cat-dump.json'),
-            path.join(process.cwd(), 'backend', 'cat-dump.json'),
-        ];
-
-        for (const p of potentialPaths) {
-            if (fs.existsSync(p)) {
-                console.log(`Serving navigation from dump: ${p}`);
-                try {
-                    const data = JSON.parse(fs.readFileSync(p, 'utf8'));
-                    return data;
-                } catch (err) {
-                    console.error('Error parsing dump:', err);
-                }
-            }
-        }
-
-        console.warn('No dump found, returning empty.');
-        return [];
+        // Fallback to bundled JSON data (100% reliable)
+        // casting to any to avoid strict type checks on the json import
+        const dump = categoryDump;
+        return dump || [];
     }
 }
