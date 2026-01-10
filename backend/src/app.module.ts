@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import * as path from 'path';
+import * as fs from 'fs';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -32,11 +33,41 @@ import { ScrapingModule } from './scraping/scraping.module';
         }
 
         console.log('Using SQLITE database');
+
+        if (isProduction) {
+          // On Vercel, the filesystem is read-only except for /tmp
+          // SQLite needs to write journal files, so we MUST copy it to /tmp
+          const dbSource = path.join(process.cwd(), 'database.sqlite');
+          const dbDest = path.join('/tmp', 'database.sqlite');
+
+          console.log(`Copying database from ${dbSource} to ${dbDest}`);
+
+          try {
+            // We copy even if it exists to ensure we have the latest seed data from build
+            if (fs.existsSync(dbSource)) {
+              fs.copyFileSync(dbSource, dbDest);
+            } else {
+              console.error(`Database source file not found at ${dbSource}`);
+            }
+          } catch (error) {
+            console.error('Error copying database to /tmp:', error);
+          }
+
+          return {
+            type: 'sqlite',
+            database: dbDest,
+            autoLoadEntities: true,
+            synchronize: false, // Disable schema sync in production
+            logging: true,
+          };
+        }
+
+        // Local Development
         return {
           type: 'sqlite',
-          database: path.join(process.cwd(), 'database.sqlite'),
+          database: 'database.sqlite',
           autoLoadEntities: true,
-          synchronize: !isProduction, // Disable sync in production (read-only FS)
+          synchronize: true,
           logging: true,
         };
       },
