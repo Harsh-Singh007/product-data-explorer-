@@ -84,10 +84,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
-      {/* Debug Bar */}
-      <div className="bg-blue-300 text-black px-4 py-1 text-center text-xs font-mono font-bold z-50 relative">
-        DEBUG: Items: {navigation?.length ?? 'N/A'} | Type: {Array.isArray(navigation) ? 'Array' : typeof navigation} | API: {process.env.NEXT_PUBLIC_API_URL || 'loc'}
-      </div>
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32 pb-24 md:pt-48 md:pb-40">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none -z-10"></div>
