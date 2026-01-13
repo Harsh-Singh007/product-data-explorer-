@@ -79,13 +79,6 @@ export default function ProductPage() {
                             </div>
                         </div>
 
-                        <div className="mt-8 grid grid-cols-3 gap-4">
-                            {[1, 2, 3].map(i => (
-                                <div key={i} className="aspect-square rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50 p-2 opacity-50">
-                                    <div className="w-full h-full rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-                                </div>
-                            ))}
-                        </div>
                     </div>
 
                     {/* Right: Product Info */}
