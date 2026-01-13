@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   try {
@@ -10,6 +11,14 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
     });
+
+    const config = new DocumentBuilder()
+      .setTitle('Product Explorer API')
+      .setDescription('The World of Books (WOB) Scraper API')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
 
     // For local development (only run listen if not on Vercel)
     if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {

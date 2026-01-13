@@ -81,12 +81,44 @@ npm run dev
 
 ---
 
-## 📈 Search Optimization
-The platform uses PostgreSQL `ILike` queries for efficient, case-insensitive title matching, ensuring that users find exactly what they are looking for, regardless of how they type it.
+## 🧠 Design Decisions
 
-## 🧹 Database Management
-Includes automated cleanup scripts to ensure the frontend only displays categories with active inventory, providing a "no-empty-shelf" browsing experience.
+- **Lazy Scraping**: To optimize resource usage, product details (descriptions/specs) are scraped on-demand when a user first visits a product page.
+- **Turbo Mass-Scraping**: Created a local multi-threaded scraper to pre-populate 1,200+ books, bypassing the limitations of serverless environments (like Vercel) which don't support heavy Playwright tasks.
+- **PostgreSQL ILike**: Selected `ILike` for search to provide a user-friendly, case-insensitive search experience without the overhead of a full-text search engine (like ElasticSearch) for this scale.
+- **Glassmorphism UI**: High-gloss, premium design language chosen to make the product data feel more "premium" and engaging.
 
 ---
 
-Developed with ❤️ by [Harsh Singh](https://github.com/Harsh-Singh007)
+## 🚢 Deployment
+
+### Frontend (Vercel)
+1. Link your repo to Vercel.
+2. Set `NEXT_PUBLIC_API_URL` to your backend URL.
+3. Deploy.
+
+### Backend (Vercel + Neon)
+1. Create a serverless Postgres instance on [Neon.tech](https://neon.tech).
+2. Set `POSTGRES_URL` in your Vercel Environment Variables.
+3. Deploy as a NestJS serverless function.
+
+### Docker (Local/Self-Host)
+```bash
+docker-compose up --build
+```
+
+---
+
+## 📁 Repository Structure
+
+```text
+product-data-explorer/
+├── frontend/             # Next.js Application
+│   ├── src/app/          # App Router Pages
+│   └── src/providers/    # React Context Providers
+├── backend/              # NestJS Application
+│   ├── src/product/      # Product Module (Search/Details)
+│   ├── src/scraping/     # Playwright Scraper Service
+│   └── sample-seed.sql   # Database Seed script
+└── .github/workflows/    # CI Pipeline (GitHub Actions)
+```
