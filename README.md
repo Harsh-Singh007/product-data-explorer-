@@ -1,4 +1,4 @@
-# 📚 Product Data Explorer
+# 📚 Product Data Explorer.
 
 A high-performance, full-stack product discovery platform that extracts and explores millions of books from World of Books using advanced scraping technology.
 
