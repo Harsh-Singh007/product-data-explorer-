@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { ScrapingService } from '../scraping/scraping.service';
 
@@ -16,7 +16,7 @@ export class ProductController {
     async search(@Query('q') q: string) {
         if (!q) return [];
         return this.productRepo.find({
-            where: { title: Like(`%${q}%`) },
+            where: { title: ILike(`%${q}%`) },
             take: 20
         });
     }
