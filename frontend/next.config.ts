@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.worldofbooks.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'image-server.worldofbooks.com',
       }
     ],
   },

@@ -23,12 +23,12 @@ import { SeedingModule } from './seeding/seeding.module';
         const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
         if (databaseUrl) {
-          console.log('Using POSTGRES database');
+          console.log(`Using POSTGRES database. URL length: ${databaseUrl.length}`);
           return {
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: true, // Be careful with this in production
+            synchronize: false, // Disabled to avoid issues with poolers and speed up startup
             ssl: { rejectUnauthorized: false },
           };
         }

@@ -1,6 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { ScrapingService } from '../scraping/scraping.service';
 
@@ -11,6 +11,15 @@ export class ProductController {
         private productRepo: Repository<Product>,
         private scrapingService: ScrapingService,
     ) { }
+
+    @Get('search')
+    async search(@Query('q') q: string) {
+        if (!q) return [];
+        return this.productRepo.find({
+            where: { title: Like(`%${q}%`) },
+            take: 20
+        });
+    }
 
     @Get(':id')
     async findOne(@Param('id') id: string) {

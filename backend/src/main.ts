@@ -26,7 +26,12 @@ async function bootstrap() {
   }
 }
 
-// Initializing the server once
+// For local development, start the server immediately
+if (require.main === module) {
+  bootstrap();
+}
+
+// Initializing the server once for Vercel
 let server: any;
 
 export default async (req: any, res: any) => {

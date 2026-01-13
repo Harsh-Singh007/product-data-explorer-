@@ -2,11 +2,22 @@
 
 import { useNavigation } from '@/hooks/useNavigation';
 import Link from 'next/link';
-import { BookOpen, Sparkles, TrendingUp, Search, Globe } from 'lucide-react';
+import { BookOpen, TrendingUp, Search } from 'lucide-react';
 import CurrencyToggle from '@/components/CurrencyToggle';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { data: navigation, isLoading, error } = useNavigation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   if (isLoading) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
@@ -101,7 +112,7 @@ export default function Home() {
             scraped instantly with the power of modern tech.
           </p>
 
-          <div className="max-w-2xl mx-auto relative group">
+          <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group">
             <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-30 transition-opacity rounded-full"></div>
             <div className="relative flex items-center glass p-2 rounded-full shadow-2xl">
               <div className="pl-6 pr-4">
@@ -109,14 +120,19 @@ export default function Home() {
               </div>
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search collection..."
                 className="w-full bg-transparent border-none outline-none py-4 text-lg font-medium"
               />
-              <button className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold transition-all shadow-lg active:scale-95">
+              <button
+                type="submit"
+                className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold transition-all shadow-lg active:scale-95"
+              >
                 Explore
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
 

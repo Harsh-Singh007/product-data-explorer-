@@ -17,18 +17,25 @@ export class NavigationController {
 
     @Get()
     async findAll() {
-        // Fetch all categories from the database
-        const categories = await this.navRepo.find({
-            order: { id: 'ASC' }
-        });
+        // Try to fetch from database first (works with both SQLite and Postgres)
+        try {
+            const categories = await this.navRepo.find({
+                order: { id: 'ASC' }
+            });
 
-        // If database is empty, fall back to static data
-        if (!categories || categories.length === 0) {
+            // If database has data, return it (whether local SQLite or Vercel Postgres)
+            if (categories && categories.length > 0) {
+                console.log(`Returning ${categories.length} categories from database`);
+                return categories;
+            }
+
+            // If database is empty, fall back to static data
             console.warn('Database is empty, returning static navigation data');
             return STATIC_NAVIGATION_DATA;
+        } catch (error) {
+            console.error('Error fetching from database, falling back to static data:', error);
+            return STATIC_NAVIGATION_DATA;
         }
-
-        return categories;
     }
 
     @Get('seed')
