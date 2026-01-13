@@ -50,18 +50,18 @@ export default function ProductPage() {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white pb-24">
             <div className="max-w-7xl mx-auto px-6">
-                <header className="pt-32 pb-8 flex items-center justify-between">
+                <header className="pt-24 lg:pt-32 pb-8 flex items-center justify-between">
                     <Link href="/" className="group inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all font-medium text-sm">
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         <span>Back to Explorer</span>
                     </Link>
                 </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
                     {/* Left: Product Image */}
-                    <div className="sticky top-8">
-                        <div className="aspect-[3/4.5] bg-white dark:bg-slate-900 rounded-[3rem] overflow-hidden shadow-2xl border border-slate-200/50 dark:border-slate-800/50 p-4">
-                            <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-slate-100 dark:bg-slate-800 relative group">
+                    <div className="lg:sticky lg:top-32">
+                        <div className="aspect-[3/4.5] bg-white dark:bg-slate-900 rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden shadow-2xl border border-slate-200/50 dark:border-slate-800/50 p-3 lg:p-4">
+                            <div className="w-full h-full rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden bg-slate-100 dark:bg-slate-800 relative group">
                                 {product.imageUrl ? (
                                     <img
                                         src={product.imageUrl}
@@ -73,7 +73,7 @@ export default function ProductPage() {
                                         No Image Available
                                     </div>
                                 )}
-                                <div className="absolute top-6 left-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-slate-200/50 dark:border-white/10 shadow-xl">
+                                <div className="absolute top-4 left-4 lg:top-6 lg:left-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 lg:py-2 rounded-lg lg:rounded-xl text-[10px] lg:text-xs font-black uppercase tracking-widest border border-slate-200/50 dark:border-white/10 shadow-xl">
                                     Quality Verified
                                 </div>
                             </div>
@@ -92,21 +92,21 @@ export default function ProductPage() {
                             </span>
                         </nav>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight">
+                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight">
                             {product.title}
                         </h1>
 
-                        <div className="flex items-center gap-8 mb-12">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-8 mb-12">
                             <div className="flex flex-col">
                                 <span className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Our Price</span>
-                                <span className="text-5xl font-black text-indigo-600 dark:text-indigo-400">
+                                <span className="text-4xl lg:text-5xl font-black text-indigo-600 dark:text-indigo-400">
                                     {formatPrice(product.price, product.currency)}
                                 </span>
                             </div>
-                            <div className="h-12 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+                            <div className="hidden sm:block h-12 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
                             <div className="flex flex-col">
                                 <span className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Condition</span>
-                                <span className="text-xl font-bold text-slate-700 dark:text-slate-200">Excellent</span>
+                                <span className="text-lg lg:text-xl font-bold text-slate-700 dark:text-slate-200">Excellent</span>
                             </div>
                         </div>
 
@@ -139,9 +139,9 @@ export default function ProductPage() {
                                 <Info className="w-5 h-5 text-indigo-500" />
                                 <h3 className="text-xl font-black">Description</h3>
                             </div>
-                            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm font-medium">
+                            <div className="max-w-none text-lg text-slate-600 dark:text-slate-400 leading-relaxed bg-white dark:bg-slate-900 p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm font-medium">
                                 {product.detail?.description || 'This treasure is waiting for its next reader. A detailed summary will be available shortly.'}
-                            </p>
+                            </div>
                         </div>
 
                         {/* Specs */}
@@ -150,7 +150,7 @@ export default function ProductPage() {
                                 <h3 className="text-xl font-black mb-6">Technical Specifications</h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {Object.entries(product.detail.specs).map(([key, value]) => (
-                                        <div key={key} className="flex flex-col p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transform transition-transform hover:scale-[1.02]">
+                                        <div key={key} className="flex flex-col p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transform transition-transform hover:scale-[1.02]">
                                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
                                                 {key.replace(/_/g, ' ')}
                                             </span>

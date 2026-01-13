@@ -56,8 +56,8 @@ export default function CategoryPage() {
     return (
         <div className="min-h-screen pb-24 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
             <div className="max-w-7xl mx-auto px-6">
-                <header className="pt-32 pb-16">
-                    <div className="flex items-center justify-between transition-all mb-12">
+                <header className="pt-24 lg:pt-32 pb-12 lg:pb-16">
+                    <div className="flex items-center justify-between transition-all mb-8 lg:mb-12">
                         <Link href="/" className="group inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all font-medium text-sm">
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             <span>Back to Explorer</span>
@@ -66,11 +66,11 @@ export default function CategoryPage() {
 
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 animate-fade-in">
                         <div>
-                            <div className="flex items-center gap-3 text-indigo-600 dark:text-indigo-400 font-bold mb-4">
+                            <div className="flex items-center gap-3 text-indigo-600 dark:text-indigo-400 font-bold mb-3 lg:mb-4">
                                 <Book className="w-5 h-5" />
                                 <span className="tracking-widest uppercase text-sm">Collection Library</span>
                             </div>
-                            <h1 className="text-5xl md:text-6xl font-black">{category?.title || slug}</h1>
+                            <h1 className="text-4xl md:text-6xl font-black">{category?.title || slug}</h1>
                         </div>
                         <div className="bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                             <span className="text-slate-500 font-medium">Available Inventory:</span>

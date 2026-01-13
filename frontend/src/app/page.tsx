@@ -96,13 +96,13 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-24 md:pt-48 md:pb-40">
+      <section className="relative overflow-hidden pt-24 pb-16 md:pt-48 md:pb-40">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none -z-10"></div>
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl opacity-50 pointer-events-none -z-10"></div>
         <div className="absolute top-1/2 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl opacity-50 pointer-events-none -z-10"></div>
 
         <div className="container mx-auto px-6 text-center animate-fade-in">
-          <h1 className="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9]">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9]">
             Discover Your Next <br />
             <span className="gradient-text">Great Adventure.</span>
           </h1>
