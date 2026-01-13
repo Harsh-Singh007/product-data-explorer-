@@ -6,17 +6,25 @@ const connectionString = 'postgresql://neondb_owner:npg_d58NSkyVrQgH@ep-snowy-sa
 async function scrapeSingleProduct(browser, pg, prod) {
     const page = await browser.newPage();
     try {
-        console.log(`📖 Scraping: ${prod.title}`);
         await page.goto(prod.sourceUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-        await Promise.race([
-            page.waitForSelector('section[id*="product_accordion_summary"]', { timeout: 10000 }),
-            page.waitForSelector('.additional-info-table', { timeout: 10000 }),
-            page.waitForSelector('.product__description', { timeout: 10000 }),
-            page.waitForSelector('.panel', { timeout: 10000 })
-        ]).catch(() => { });
+        // More aggressive selector list
+        const selectors = [
+            'section[id*="product_accordion_summary"] .panel',
+            '.product-accordion .panel',
+            '.panel',
+            '.product__description',
+            '[id*="description"]',
+            '.product-details__description',
+            '.content-container',
+            'main#MainContent p' // Fallback to first few paragraphs
+        ];
 
-        const description = await page.$eval('section[id*="product_accordion_summary"] .panel, .product-accordion .panel, .panel, .product__description, [id*="description"]', el => el.textContent?.trim() || '').catch(() => '');
+        let description = '';
+        for (const sel of selectors) {
+            description = await page.$eval(sel, el => el.textContent?.trim() || '').catch(() => '');
+            if (description && description.length > 50) break;
+        }
 
         const specs = {};
         try {
@@ -31,16 +39,16 @@ async function scrapeSingleProduct(browser, pg, prod) {
             }
         } catch (e) { }
 
-        console.log(`  ✨ ${prod.title}: Description length: ${description.length}`);
+        console.log(`  ✨ [${prod.id}] ${prod.title.substring(0, 20)}: Desc: ${description.length} chars`);
 
         await pg.query(
             `INSERT INTO product_detail ("productId", description, specs) 
              VALUES ($1, $2, $3) 
              ON CONFLICT ("productId") DO UPDATE SET description = $2, specs = $3`,
-            [prod.id, description || 'This treasure is waiting for its next reader.', JSON.stringify(specs)]
+            [prod.id, description || 'A detailed summary for this pre-loved book will be available shortly.', JSON.stringify(specs)]
         );
     } catch (err) {
-        console.error(`  ❌ Error for ${prod.title}: ${err.message}`);
+        console.error(`  ❌ Error for ID ${prod.id}: ${err.message}`);
     } finally {
         await page.close();
     }
@@ -52,39 +60,39 @@ async function massScrapeDetails() {
     console.log('✅ Connected to Neon Postgres');
 
     const browser = await chromium.launch({ headless: true });
-    const CONCURRENCY = 5; // Scrape 5 books at once
+    const CONCURRENCY = 10; // Boosted to 10
 
     try {
         while (true) {
-            // Get products without descriptions
             const res = await pg.query(`
                 SELECT p.id, p.title, p."sourceUrl" 
                 FROM product p 
                 LEFT JOIN product_detail pd ON p.id = pd."productId" 
-                WHERE pd.description IS NULL OR pd.description = '' OR pd.description = 'This treasure is waiting for its next reader.'
-                LIMIT 50
+                WHERE pd.description IS NULL 
+                   OR pd.description = '' 
+                   OR pd.description LIKE 'This treasure is waiting%' 
+                   OR pd.description LIKE 'A detailed summary%'
+                LIMIT 100
             `);
 
             if (res.rows.length === 0) {
-                console.log('🎉 All products have descriptions!');
+                console.log('🎉 All products processed!');
                 break;
             }
 
-            console.log(`🚀 Processing batch of ${res.rows.length} products (Concurrency: ${CONCURRENCY})...`);
+            console.log(`🚀 Processing batch of ${res.rows.length} (Concurrency: ${CONCURRENCY})...`);
 
-            // Process in smaller sub-batches to control concurrency
             for (let i = 0; i < res.rows.length; i += CONCURRENCY) {
                 const batch = res.rows.slice(i, i + CONCURRENCY);
                 await Promise.all(batch.map(prod => scrapeSingleProduct(browser, pg, prod)));
             }
-
             console.log('--- Batch Finish ---\n');
         }
 
     } finally {
         await browser.close();
         await pg.end();
-        console.log('\n🏁 Full Detail Scrape completed!');
+        console.log('\n🏁 Heavy Scrape completed!');
     }
 }
 
