@@ -110,22 +110,17 @@ export default function ProductPage() {
                             </div>
                         </div>
 
-                        {product.sourceUrl && (
-                            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                                <a
-                                    href={product.sourceUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 px-8 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[2rem] font-black text-center transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
-                                >
-                                    Purchase on WOB
-                                    <ExternalLink className="w-5 h-5" />
-                                </a>
-                                <button className="flex-1 px-8 py-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] font-bold text-center transition-all hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm active:scale-95">
-                                    Add to Wishlist
-                                </button>
-                            </div>
-                        )}
+                        <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                            <a
+                                href={product.sourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full px-8 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[2rem] font-black text-center transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
+                            >
+                                Purchase on WOB
+                                <ExternalLink className="w-5 h-5" />
+                            </a>
+                        </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
                             <div className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/30 dark:border-slate-800/30">

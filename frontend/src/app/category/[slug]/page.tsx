@@ -99,12 +99,6 @@ export default function CategoryPage() {
                                         <Book className="w-12 h-12 opacity-20" />
                                     </div>
                                 )}
-                                <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <button className="w-full py-3 bg-white text-slate-900 rounded-xl font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                        <ShoppingBag className="w-4 h-4" />
-                                        Explore Item
-                                    </button>
-                                </div>
                             </div>
 
                             <div className="p-8 flex flex-col flex-grow">
