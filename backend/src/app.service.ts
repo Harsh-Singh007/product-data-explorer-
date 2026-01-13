@@ -6,11 +6,11 @@ export class AppService {
     const fs = require('fs');
     const path = require('path');
 
-    let rootFiles = [];
-    try { rootFiles = fs.readdirSync(process.cwd()); } catch (e) { rootFiles = [e.message]; }
+    let rootFiles: string[] = [];
+    try { rootFiles = fs.readdirSync(process.cwd()); } catch (e: any) { rootFiles = [e.message]; }
 
-    let tmpFiles = [];
-    try { tmpFiles = fs.readdirSync('/tmp'); } catch (e) { tmpFiles = [e.message]; }
+    let tmpFiles: string[] = [];
+    try { tmpFiles = fs.readdirSync('/tmp'); } catch (e: any) { tmpFiles = [e.message]; }
 
     return {
       message: 'Hello World! Backend is Online.',
